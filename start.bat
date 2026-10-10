@@ -1,5 +1,5 @@
 @echo off
-chcp 65001 >nul
+setlocal
 title Taming.io Server Checker
 
 cd /d "%~dp0"
@@ -10,7 +10,7 @@ set "PROFILE=%~dp0opera_bot_profile"
 
 if not exist "%PYTHON%" (
     echo.
-    echo [ERROR] Python из venv не найден:
+    echo [ERROR] Python venv not found:
     echo %PYTHON%
     echo.
     pause
@@ -19,10 +19,10 @@ if not exist "%PYTHON%" (
 
 if not exist "%OPERA%" (
     echo.
-    echo [ERROR] Opera GX не найдена:
+    echo [ERROR] Opera GX not found:
     echo %OPERA%
     echo.
-    echo Измени переменную OPERA внутри start.bat.
+    echo Edit the OPERA path inside start.bat.
     pause
     exit /b 1
 )
@@ -33,67 +33,58 @@ echo ==========================================
 echo        Taming.io Server Checker
 echo ==========================================
 echo.
-echo 1. Discord версия
-echo 2. Telegram версия
-echo 3. Только запустить Opera GX
-echo 0. Выход
+echo 1. Discord bot
+echo 2. Telegram bot
+echo 3. Opera GX only
+echo 0. Exit
 echo.
 
-set /p "choice=Выбери пункт: "
+set /p "choice=Select: "
 
 if "%choice%"=="1" goto discord
 if "%choice%"=="2" goto telegram
 if "%choice%"=="3" goto browser
-if "%choice%"=="0" exit /b 0
+if "%choice%"=="0" goto end
 
 goto menu
 
 :start_browser
 echo.
-echo Запускаем Opera GX...
-
-start "" "%OPERA%" ^
-    --remote-debugging-port=9222 ^
-    --remote-debugging-address=127.0.0.1 ^
-    --user-data-dir="%PROFILE%" ^
-    "https://taming.io/"
-
-echo Ждём запуск браузера...
+echo Starting Opera GX...
+start "" "%OPERA%" --remote-debugging-port=9222 --remote-debugging-address=127.0.0.1 --user-data-dir="%PROFILE%" "https://taming.io/"
+echo Waiting for browser startup...
 timeout /t 5 /nobreak >nul
 exit /b 0
 
 :discord
 call :start_browser
-
 echo.
-echo Запускаем Discord бота...
+echo Starting Discord bot...
 echo.
-
 "%PYTHON%" "%~dp0dsbot.py"
-
 echo.
-echo Discord бот остановлен.
+echo Discord bot stopped.
 pause
 goto menu
 
 :telegram
 call :start_browser
-
 echo.
-echo Запускаем Telegram бота...
+echo Starting Telegram bot...
 echo.
-
 "%PYTHON%" "%~dp0tgbot.py"
-
 echo.
-echo Telegram бот остановлен.
+echo Telegram bot stopped.
 pause
 goto menu
 
 :browser
 call :start_browser
-
 echo.
-echo Opera GX запущена.
+echo Opera GX started.
 pause
 goto menu
+
+:end
+endlocal
+exit /b 0
