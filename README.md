@@ -117,3 +117,4 @@ start.bat
 - Бот работает с вкладкой Taming.io в этом профиле.
 - При Cloudflare может потребоваться ручное подтверждение.
 - Не запускай одновременно Telegram и Discord версии, если обе используют один и тот же браузер.
+<img width="238" height="784" alt="image" src="https://github.com/user-attachments/assets/06ea2873-6ac4-40d0-9930-1d6b550f8059" />
